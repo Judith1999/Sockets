@@ -6,7 +6,11 @@
 package sockets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import javax.swing.*;
+import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author ELMA
@@ -53,6 +57,8 @@ class LaminaMarcoCliente extends JPanel{
 	
 		miboton=new JButton("Enviar");
 		
+                EnviaTexto mievento =new EnviaTexto();
+                miboton.addActionListener(mievento);
 		add(miboton);	
 		
 	}
@@ -61,7 +67,17 @@ class LaminaMarcoCliente extends JPanel{
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            System.out.println("Hola funcion");
+            try {
+                //System.out.println(campo1.getText());
+                Socket misocket=new Socket("192.168.1.80",9999);
+                
+            } catch (IOException ex) {
+                Logger.getLogger(LaminaMarcoCliente.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println(ex.getMessage());
+            }
+            
+            
+            
         }
     
     
