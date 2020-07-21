@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package sockets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 /**
  *
@@ -19,6 +21,9 @@ public class Cliente {
 
 	}
 }
+
+
+
 class MarcoCliente extends JFrame{
 	
 	public MarcoCliente(){
@@ -52,7 +57,15 @@ class LaminaMarcoCliente extends JPanel{
 		
 	}
 	
-		
+    private class EnviaTexto implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            System.out.println("Hola funcion");
+        }
+    
+    
+    }		
 		
 	private JTextField campo1;
 	
