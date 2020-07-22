@@ -47,10 +47,18 @@ class MarcoCliente extends JFrame{
 class LaminaMarcoCliente extends JPanel{
 	
 	public LaminaMarcoCliente(){
+              nick=new JTextField(5);   
+              add(nick);
 	
-		JLabel texto=new JLabel("CLIENTE");
+		JLabel texto=new JLabel("-CHAT-");
 		
 		add(texto);
+                ip =new JTextField(8);
+                add(ip);
+                
+                campochat=new JTextArea(12,20);
+                
+                add(campochat);
 	
 		campo1=new JTextField(20);
 	
@@ -71,9 +79,14 @@ class LaminaMarcoCliente extends JPanel{
             try {
                 
                 Socket misocket=new Socket("192.168.1.80",9999);
-                DataOutputStream flujo_salida =new DataOutputStream(misocket.getOutputStream());
-                flujo_salida.writeUTF(campo1.getText());
-                flujo_salida.close();
+                
+                PaqueteEnvio datos =new PaqueteEnvio();
+                datos.setNick(nick.getText());
+                datos.setIp(ip.getText());
+                datos.setMensaje(campo1.getText());
+                //DataOutputStream flujo_salida =new DataOutputStream(misocket.getOutputStream());
+                //flujo_salida.writeUTF(campo1.getText());
+                //flujo_salida.close();
                 
                 
             } catch (IOException ex) {
@@ -88,8 +101,40 @@ class LaminaMarcoCliente extends JPanel{
     
     }		
 		
-	private JTextField campo1;
+	private JTextField campo1, nick, ip;
+        private JTextArea campochat;
 	
 	private JButton miboton;
 	
+}
+
+class PaqueteEnvio{
+private String nick, ip, mensaje;
+
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
+
+
 }
