@@ -7,6 +7,12 @@ package sockets;
 import javax.swing.*;
 
 import java.awt.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author ELMA
@@ -22,7 +28,7 @@ public class Servidor {
 			
 	}	
 }
-class MarcoServidor extends JFrame {
+class MarcoServidor extends JFrame implements Runnable{
 	
 	public MarcoServidor(){
 		
@@ -39,8 +45,31 @@ class MarcoServidor extends JFrame {
 		add(milamina);
 		
 		setVisible(true);
+                Thread mihilo=new Thread(this);
+                mihilo.start();
 		
 		}
 	
 	private	JTextArea areatexto;
+        
+
+    @Override
+    public void run() {
+            try {
+                //System.out.println("Estoy a la espera");
+                ServerSocket servidor =new ServerSocket(9999);
+                while(true){
+                Socket misocket=servidor.accept();
+                
+                DataInputStream flujo_entrada=new DataInputStream(misocket.getInputStream());
+                String mensaje_texto=flujo_entrada.readUTF();
+                areatexto.append("\n"+ mensaje_texto);
+                misocket.close();
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(MarcoServidor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+    }
+    
 }
