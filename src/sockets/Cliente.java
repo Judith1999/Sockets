@@ -6,6 +6,7 @@
 package sockets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import javax.swing.*;
 import java.net.*;
@@ -68,8 +69,12 @@ class LaminaMarcoCliente extends JPanel{
         @Override
         public void actionPerformed(ActionEvent ae) {
             try {
-                //System.out.println(campo1.getText());
+                
                 Socket misocket=new Socket("192.168.1.80",9999);
+                DataOutputStream flujo_salida =new DataOutputStream(misocket.getOutputStream());
+                flujo_salida.writeUTF(campo1.getText());
+                flujo_salida.close();
+                
                 
             } catch (IOException ex) {
                 Logger.getLogger(LaminaMarcoCliente.class.getName()).log(Level.SEVERE, null, ex);
