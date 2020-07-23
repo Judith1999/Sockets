@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -58,17 +60,35 @@ class MarcoServidor extends JFrame implements Runnable{
             try {
                 //System.out.println("Estoy a la espera");
                 ServerSocket servidor =new ServerSocket(9999);
+                String nick, ip, mensaje;
+                PaqueteEnvio paquete_recibido;
+                
                 while(true){
                 Socket misocket=servidor.accept();
                 
-                DataInputStream flujo_entrada=new DataInputStream(misocket.getInputStream());
-                String mensaje_texto=flujo_entrada.readUTF();
-                areatexto.append("\n"+ mensaje_texto);
-                misocket.close();
+                ObjectInputStream paquete_datos =new ObjectInputStream(misocket.getInputStream());
+                paquete_recibido=(PaqueteEnvio) paquete_datos.readObject();
+                nick=paquete_recibido.getNick();
+                ip=paquete_recibido.getIp();
+                mensaje=paquete_recibido.getMensaje();
+                
+               // DataInputStream flujo_entrada=new DataInputStream(misocket.getInputStream());
+               // String mensaje_texto=flujo_entrada.readUTF();
+                //areatexto.append("\n"+ mensaje_texto);
+               areatexto.append("\n" + nick + ":" + mensaje + "para" + ip);
+                Socket enviaDestinatario=new Socket(ip, 9090);
+                 ObjectOutputStream paqueteReenvio =new ObjectOutputStream(enviaDestinatario.getOutputStream());
+                 paqueteReenvio.writeObject(paquete_recibido);
+                paqueteReenvio.close();
+                 enviaDestinatario.close();
+                
+             misocket.close();
                 }
             } catch (IOException ex) {
                 Logger.getLogger(MarcoServidor.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } catch (ClassNotFoundException ex) {
+                
+            } 
             
     }
     
